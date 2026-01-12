@@ -1,0 +1,208 @@
+#:kivy 2.0.0
+
+# --- Screen Manager ---
+ScreenManager:
+    LoadingScreen:
+    MainScreen:
+
+# --- Custom Button Styles (Same as before) ---
+<RemoteButton@Button>:
+    font_size: '18sp'
+    background_normal: ''
+    background_color: 0.2, 0.2, 0.2, 1
+    color: 1, 1, 1, 1
+    canvas.before:
+        Color:
+            rgba: self.background_color
+        RoundedRectangle:
+            pos: self.pos
+            size: self.size
+            radius: [10,]
+
+<PowerButton@RemoteButton>:
+    background_color: 0.8, 0, 0, 1
+    text: 'POWER'
+
+<MuteButton@RemoteButton>:
+    background_color: 0, 0.6, 0, 1
+    text: 'MUTE'
+
+<NavButton@RemoteButton>:
+    background_color: 0.7, 0.8, 0.2, 1
+    color: 0, 0, 0, 1
+
+<ColorBtn@Button>:
+    background_normal: ''
+    text: ''
+
+# ==============================
+# NEW: THE LOADING SCREEN
+# ==============================
+<LoadingScreen>:
+    name: 'loading'
+    canvas.before:
+        # Blue background color
+        Color:
+            rgba: 0.1, 0.2, 0.6, 1 
+        Rectangle:
+            pos: self.pos
+            size: self.size
+        # To add a "tech" background image later, uncomment below and add image file:
+        # Source: 'tech_background.png'
+
+    BoxLayout:
+        orientation: 'vertical'
+        padding: 50
+        spacing: 20
+
+        # Spacer
+        Widget:
+            size_hint_y: 0.3
+
+        # Remote Icon Placeholder (Center)
+        Image:
+            # Using a built-in Kivy icon as a placeholder. 
+            # Replace 'atlas://...' with your own 'remote_icon.png' later.
+            source: 'atlas://data/images/defaulttheme/ring'
+            size_hint: (None, None)
+            size: (150, 150)
+            pos_hint: {'center_x': 0.5}
+            canvas.before:
+                Color:
+                    rgba: 1, 1, 1, 1 # White icon tint
+
+        # Spacer
+        Widget:
+            size_hint_y: 0.1
+
+        # Initializing Text (Bottom)
+        Label:
+            text: 'Initializing Hardware...'
+            font_size: '20sp'
+            bold: True
+            color: 0.8, 0.9, 1, 1
+            size_hint_y: 0.2
+
+        # Bottom padding spacer
+        Widget:
+            size_hint_y: 0.1
+
+
+# ==============================
+# THE MAIN REMOTE SCREEN (Your previous layout)
+# ==============================
+<MainScreen>:
+    name: 'main'
+    BoxLayout:
+        orientation: 'vertical'
+        padding: 20
+        spacing: 15
+        canvas.before:
+            Color:
+                rgba: 0.1, 0.1, 0.1, 1
+            Rectangle:
+                pos: self.pos
+                size: self.size
+
+        # --- Top Row: Power & Mute ---
+        BoxLayout:
+            size_hint_y: 0.1
+            spacing: 20
+            PowerButton:
+                on_release: app.send_command('power')
+            MuteButton:
+                on_release: app.send_command('mute')
+
+        # --- Number Pad ---
+        GridLayout:
+            cols: 3
+            spacing: 10
+            size_hint_y: 0.3
+            RemoteButton:
+                text: '1'
+                on_release: app.send_command('1')
+            RemoteButton:
+                text: '2'
+            RemoteButton:
+                text: '3'
+            RemoteButton:
+                text: '4'
+            RemoteButton:
+                text: '5'
+            RemoteButton:
+                text: '6'
+            RemoteButton:
+                text: '7'
+            RemoteButton:
+                text: '8'
+            RemoteButton:
+                text: '9'
+            RemoteButton:
+                text: 'INFO'
+            RemoteButton:
+                text: '0'
+                on_release: app.send_command('0')
+            RemoteButton:
+                text: 'EXIT'
+
+        # --- Navigation Cluster ---
+        GridLayout:
+            cols: 3
+            spacing: 10
+            size_hint_y: 0.25
+            RemoteButton:
+                text: 'VOL+'
+                on_release: app.send_command('vol_up')
+            NavButton:
+                text: '^'
+                on_release: app.send_command('up')
+            RemoteButton:
+                text: 'CH+'
+                on_release: app.send_command('ch_up')
+            NavButton:
+                text: '<'
+                on_release: app.send_command('left')
+            NavButton:
+                text: 'OK'
+                on_release: app.send_command('ok')
+            NavButton:
+                text: '>'
+                on_release: app.send_command('right')
+            RemoteButton:
+                text: 'VOL-'
+                on_release: app.send_command('vol_down')
+            NavButton:
+                text: 'v'
+                on_release: app.send_command('down')
+            RemoteButton:
+                text: 'CH-'
+                on_release: app.send_command('ch_down')
+
+        # --- Menu & Back ---
+        BoxLayout:
+            size_hint_y: 0.08
+            spacing: 20
+            RemoteButton:
+                text: 'MENU'
+            RemoteButton:
+                text: 'BACK'
+
+        # --- Colored Buttons ---
+        BoxLayout:
+            size_hint_y: 0.08
+            spacing: 10
+            ColorBtn:
+                background_color: 1, 0, 0, 1
+            ColorBtn:
+                background_color: 0, 1, 0, 1
+            ColorBtn:
+                background_color: 1, 1, 0, 1
+            ColorBtn:
+                background_color: 0, 0, 1, 1
+
+        # --- Logo ---
+        Label:
+            text: 'SITI DIGITAL'
+            font_size: '20sp'
+            bold: True
+            size_hint_y: 0.05
